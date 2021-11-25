@@ -1,0 +1,11 @@
+cmake-build-debug/
+**/*.o
+**/*.a
+*.log
+**/*.pdf
+Basic-Demo-*
+score.cpp
+Test/
+.idea/
+.vscode/
+
