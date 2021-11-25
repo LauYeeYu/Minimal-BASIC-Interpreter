@@ -1,5 +1,0 @@
-./Basic-Demo-64bit < Test/trace04.txt > stdoutput
-./cmake-build-debug/code < Test/trace04.txt > youroutput
-diff stdoutput youroutput
-rm stdoutput
-rm youroutput
