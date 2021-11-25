@@ -5,6 +5,7 @@ cmake-build-debug/
 **/*.pdf
 Basic-Demo-*
 score.cpp
+score
 Test/
 .idea/
 .vscode/

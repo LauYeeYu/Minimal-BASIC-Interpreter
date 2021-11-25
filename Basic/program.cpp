@@ -56,3 +56,9 @@ int Program::getNextLineNumber(int lineNumber) {
     if (Temp == _program.end()) return -1;
     else return Temp->first;
 }
+
+bool Program::noSuchLine(int lineNumber)
+{
+    if (_program.count(lineNumber)) return false;
+    else return true;
+}

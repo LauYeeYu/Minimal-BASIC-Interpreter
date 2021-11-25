@@ -24,13 +24,18 @@ EvalState::~EvalState() {
 }
 
 void EvalState::setValue(const string& var, int value) {
-    symbolTable[var] = value;
+    _symbolTable[var] = value;
 }
 
 int EvalState::getValue(const string& var) {
-    return symbolTable[var];
+    return _symbolTable[var];
 }
 
 bool EvalState::isDefined(const string& var) {
-    return symbolTable.count(var);
+    return _symbolTable.count(var);
+}
+
+void EvalState::clear()
+{
+    _symbolTable.clear();
 }

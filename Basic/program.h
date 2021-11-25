@@ -126,6 +126,14 @@ public:
  */
     int getNextLineNumber(int lineNumber);
 
+/*
+ * Method: noSuchLine
+ * Usage: bool noSuchLine = noSuchLine(int lineNumber);
+ * ------------------------------------------------------------
+ * Returns the boolean of whether a line is in this program.
+ */
+    bool noSuchLine(int lineNumber);
+
 private:
     std::map<int, std::string> _program;
 };

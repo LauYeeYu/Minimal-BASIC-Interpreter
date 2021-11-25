@@ -28,7 +28,10 @@ void scan(TokenScanner &scanner, Program &program, EvalState &state);
 void LETStatement(TokenScanner &scanner, EvalState &state);
 void PRINTStatement(TokenScanner &scanner, EvalState &state);
 void INPUTStatement(TokenScanner &scanner, EvalState &state);
-void RUNStatement(TokenScanner &inScanner, Program &program);
+void RUNStatement(TokenScanner &inScanner, Program &program, EvalState &state);
+int GOTOStatement(TokenScanner &scanner, Program &program);
+int IFStatement(std::string &line, EvalState &state, Program &program, int currentLine);
+void LISTStatement(TokenScanner &scanner, Program &program);
 void syntaxCheck(std::string line);
 bool isDigit (char c);
 bool isLetter(char c);
@@ -36,13 +39,14 @@ bool isLetterOrDigit(char c);
 bool isValidChar(char c);
 bool identifierCheck(std::string &identifier);
 bool numberCheck(std::string &identifier);
+bool check(char op, int lhs, int rhs);
+int stringToInt(std::string &s);
 
 /* Main program */
 
 int main() {
     EvalState state;
     Program program;
-    cout << "Stub implementation of BASIC" << endl;
     while (true) {
         try {
             string input = getLine();
@@ -74,14 +78,20 @@ void processLine(std::string &line, Program &program, EvalState &state) {
     // For the case of BASIC program
     if (line[0] > 47 && line[0] < 58) {
         int i = 1;
-        int number = line[0];
-        while (line[i] != ' ') {
-            number = number * 10 + line[i];
-            ++i;
+        int number = line[0] - 48;
+        for (; i < line.length(); ++i) {
+            if (line[i] == ' ') break;
+            if (line[i] < 48 || line[i] > 57) error("SYNTAX ERROR");
+            number = number * 10 + line[i] - 48;
         }
-        ++i;
-        syntaxCheck(line.substr(i));
-        program.addSourceLine(number, line.substr(i));
+        if (i == line.length()) {
+            program.removeSourceLine(number);
+        } else {
+            ++i;
+            line = line.substr(i);
+            syntaxCheck(line);
+            program.addSourceLine(number, line);
+        }
         return;
     }
 
@@ -121,6 +131,11 @@ bool identifierCheck(std::string &identifier) {
     for (int i = 1; i < identifier.length(); ++i) {
         if (!isLetterOrDigit(identifier[i])) return false;
     }
+    if (identifier == "REM" || identifier == "LET" || identifier == "PRINT"
+     || identifier == "END" || identifier == "RUN" || identifier == "INPUT"
+     || identifier == "GOTO" || identifier == "IF" || identifier == "THEN"
+     || identifier == "QUIT" || identifier == "LIST" || identifier == "CLEAR"
+     || identifier == "HELP") return false;
     return true;
 }
 
@@ -130,6 +145,13 @@ bool numberCheck(std::string &identifier) {
         if (!isDigit(i)) return false;
     }
     return true;
+}
+
+bool check(char op, int lhs, int rhs) {
+    if (op == '=') return lhs == rhs;
+    if (op == '<') return lhs < rhs;
+    if (op == '>') return lhs > rhs;
+    error("SYNTAX ERROR");
 }
 
 void scan(TokenScanner &scanner, Program &program, EvalState &state) {
@@ -166,17 +188,18 @@ void scan(TokenScanner &scanner, Program &program, EvalState &state) {
     }
 
     if (stmt == "RUN") {
-        RUNStatement(scanner, program);
+        RUNStatement(scanner, program, state);
         return;
     }
 
     if (stmt == "LIST") {
-        //todo
+        LISTStatement(scanner, program);
         return;
     }
 
     if (stmt == "CLEAR") {
         program.clear();
+        state.clear();
         return;
     }
 
@@ -209,8 +232,7 @@ void PRINTStatement(TokenScanner &scanner, EvalState &state) {
     std::cout << calculate(scanner, state) << std::endl;
 }
 
-void INPUTStatement(TokenScanner &scanner, EvalState &state)
-{
+void INPUTStatement(TokenScanner &scanner, EvalState &state) {
     std::string identifier = scanner.nextToken();
     if (!identifierCheck(identifier)) error("SYNTAX ERROR");
     if (scanner.hasMoreTokens()) error("SYNTAX ERROR");
@@ -236,6 +258,67 @@ void INPUTStatement(TokenScanner &scanner, EvalState &state)
     state.setValue(identifier, value);
 }
 
+int GOTOStatement(TokenScanner &scanner, Program &program) {
+    std::string token = scanner.nextToken();
+    int lineNumber = stringToInt(token);
+    if (program.noSuchLine(lineNumber)) {
+        error("LINE NUMBER ERROR");
+    }
+    return lineNumber;
+}
+
+int IFStatement(std::string &line, EvalState &state, Program &program, int currentLine) {
+    // Find '=', '<', or '>'
+    line = line.substr(3);
+    int op = 0;
+    while (line[op] != '=' && line[op] != '<' && line[op] != '>') {
+        ++op;
+    }
+    std::string lhsString = line.substr(0, op);
+    TokenScanner lhsScanner;
+    lhsScanner.ignoreWhitespace();
+    lhsScanner.scanNumbers();
+    lhsScanner.setInput(lhsString);
+    int lhs = calculate(lhsScanner, state);
+
+    // Calculate rhs
+    int end = op + 1;
+    while (line[end] == ' ') ++end;
+    while (line[end] != ' ') ++end;
+
+    std::string rhsString = line.substr(op + 1, end - op - 1);
+    TokenScanner rhsScanner;
+    rhsScanner.ignoreWhitespace();
+    rhsScanner.scanNumbers();
+    rhsScanner.setInput(rhsString);
+    int rhs = calculate(rhsScanner, state);
+
+    // Check
+    if (check(line[op], lhs, rhs)) {
+        line = line.substr(end + 1);
+        TokenScanner scanner;
+        scanner.ignoreWhitespace();
+        scanner.scanNumbers();
+        scanner.setInput(line);
+        if (scanner.nextToken() == "THEN") {
+            return GOTOStatement(scanner, program);
+        }
+        error("SYNTAX ERROR");
+    } else {
+        return program.getNextLineNumber(currentLine);
+    }
+}
+
+void LISTStatement(TokenScanner &scanner, Program &program) {
+    if (scanner.hasMoreTokens()) error("SYNTAX ERROR");
+    int lineNumber = program.getFirstLineNumber();
+    while (lineNumber != -1) {
+        std::cout << lineNumber << " " << program.getSourceLine(lineNumber)
+                  << std::endl;
+        lineNumber = program.getNextLineNumber(lineNumber);
+    }
+}
+
 void syntaxCheck(std::string line) {
     TokenScanner scanner;
     scanner.ignoreWhitespace();
@@ -250,6 +333,7 @@ void syntaxCheck(std::string line) {
         std::string token = scanner.nextToken();
         while (!token.empty()) {
             if (token == "=") error("SYNTAX ERROR");
+            token = scanner.nextToken();
         }
         return;
     }
@@ -284,10 +368,33 @@ void syntaxCheck(std::string line) {
 
     if (stmt == "IF") {
         std::string token = scanner.nextToken();
-        while (!token.empty()) 
+
+        // Check first value
+        while (!token.empty() && token != "<" && token != ">" && token != "=") {
+            for (char i : token) {
+                if (!isValidChar(i)) error("SYNTAX ERROR");
+            }
+            token = scanner.nextToken();
+        }
+
+        // Check second value
+        if (token.empty()) error("SYNTAX ERROR");
         token = scanner.nextToken();
-        if (token != "<" && token != ">" && token != "=") error("SYNTAX ERROR");
-        token = scanner.nextToken();
+        while (!token.empty() && token != "THEN") {
+            if (token == "<" || token == ">" || token == "=") error("SYNTAX ERROR");
+            for (char i : token) {
+                if (!isValidChar(i)) error("SYNTAX ERROR");
+            }
+            token = scanner.nextToken();
+        }
+
+        // Check THEN
+        if (token.empty()) error("SYNTAX ERROR");
+
+        // Check number
+        std::string lineNumber = scanner.nextToken();
+        if (!numberCheck(lineNumber)) error("SYNTAX ERROR");
+        if (scanner.hasMoreTokens()) error("SYNTAX ERROR");
         return;
     }
 
@@ -323,9 +430,8 @@ void syntaxCheck(std::string line) {
  * won't be enumerated here.
  */
 
-void RUNStatement(TokenScanner &inScanner, Program &program) {
+void RUNStatement(TokenScanner &inScanner, Program &program, EvalState &state) {
     if (inScanner.hasMoreTokens()) error("SYNTAX ERROR");
-    EvalState state;
     int lineNumber = program.getFirstLineNumber();
     std::string line;
     while (lineNumber != -1) {
@@ -344,10 +450,27 @@ void RUNStatement(TokenScanner &inScanner, Program &program) {
         } else if (stmt == "END") {
             return;
         } else if (stmt == "GOTO") {
-            //todo
+            lineNumber = GOTOStatement(scanner, program);
+            continue;
         } else if (stmt == "IF") {
-            //todo
+            lineNumber = IFStatement(line, state, program, lineNumber);
+            continue;
         }
         lineNumber = program.getNextLineNumber(lineNumber);
     }
+}
+
+int stringToInt(std::string &s) {
+    int number = 0;
+    bool isPositive = true;
+    if (s[0] == '-') {
+        s = s.substr(1);
+        isPositive = false;
+    }
+    for (char i : s) {
+        if (i < 48 || i > 57) error("INVALID NUMBER");
+        number = number * 10 + i - 48;
+    }
+    if (!isPositive) number = -number;
+    return number;
 }

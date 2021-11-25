@@ -65,9 +65,14 @@ public:
  * Returns true if the specified variable is defined.
  */
     bool isDefined(const std::string& var);
+/*
+ * Method: clear
+ * Usage: clear the symbolTable
+ */
+    void clear();
 
 private:
-    std::map<std::string, int> symbolTable;
+    std::map<std::string, int> _symbolTable;
 };
 
 #endif
