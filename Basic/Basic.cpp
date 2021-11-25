@@ -53,7 +53,7 @@ int main() {
             if (input.empty()) continue;
             processLine(input, program, state);
         } catch (ErrorException &ex) {
-            cerr << ex.getMessage() << endl;
+            std::cout << ex.getMessage() << std::endl;
         }
     }
 }
