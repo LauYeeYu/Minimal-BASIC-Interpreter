@@ -31,103 +31,90 @@ class EvalState;
 
 class Program {
 public:
-/**
- * Constructs an empty BASIC program.
- */
     Program();
 
-/**
- * Frees any heap storage associated with the program.
- */
+    /**
+     * Frees any heap storage associated with the program.
+     */
     ~Program();
 
-/**
- * Removes all lines from the program.
- */
+    /**
+     * Removes all lines from the program.
+     */
     void clear();
 
-/**
- * @param lineNumber
- * @param line A String of the Line
- *
- * Adds a source line to the program with the specified line number.
- * If that line already exists, the text of the line replaces
- * the text of any existing line and the parsed representation
- * (if any) is deleted.  If the line is new, it is added to the
- * program in the correct sequence.
- */
+    /**
+     * @param lineNumber
+     * @param line A String of the Line
+     *
+     * Adds a source line to the program with the specified line number.
+     * If that line already exists, the text of the line replaces
+     * the text of any existing line and the parsed representation
+     * (if any) is deleted.  If the line is new, it is added to the
+     * program in the correct sequence.
+     */
     void addSourceLine(int lineNumber, Statement *stmt);
 
-/**
- * @param lineNumber
- *
- * Removes the line with the specified number from the program,
- * freeing the memory associated with any parsed representation.
- * If no such line exists, this method simply returns without
- * performing any action.
- */
+    /**
+     * @param lineNumber
+     *
+     * Removes the line with the specified number from the program,
+     * freeing the memory associated with any parsed representation.
+     * If no such line exists, this method simply returns without
+     * performing any action.
+     */
     void removeSourceLine(int lineNumber);
 
-/**
- * @param lineNumber
- * @return
- * The program line with the specified line number.
- * If no such line exists, this method returns the empty string.
- */
+    /**
+     * @param lineNumber
+     * @return
+     * The program line with the specified line number.
+     * If no such line exists, this method returns the empty string.
+     */
     Statement *getSourceLine(int lineNumber);
 
-/**
- * @return the line number of the first line in the program.
- * If the program has no lines, this method returns -1.
- */
+    /**
+     * @return the line number of the first line in the program.
+     * If the program has no lines, this method returns -1.
+     */
     int getFirstLineNumber();
 
-/**
- * @param lineNumber
- * @return the line number of the first line in the program whose
- * number is larger than the specified one, which must already exist
- * in the program.  If no more lines remain, this method returns -1.
- * Note that the lineNumber MUST be a valid line.
- */
+    /**
+     * @param lineNumber
+     * @return the line number of the first line in the program whose
+     * number is larger than the specified one, which must already exist
+     * in the program.  If no more lines remain, this method returns -1.
+     * Note that the lineNumber MUST be a valid line.
+     */
     int getNextLineNumber(int lineNumber);
 
-/**
- * @param lineNumber
- *
- * Returns the boolean of whether a line is in this program.
- */
+    /**
+     * @param lineNumber
+     *
+     * Returns the boolean of whether a line is in this program.
+     */
     bool noSuchLine(int lineNumber);
 
-/**
- * Initialize the _currentLine.  If the _program is not empty, then the
- * _currentLine will be set to the first line.  If the _program is empty,
- * then the _currentLine will be set to -1.
- */
+    /**
+     * Initialize the _currentLine.  If the _program is not empty, then the
+     * _currentLine will be set to the first line.  If the _program is empty,
+     * then the _currentLine will be set to -1.
+     */
     void initCurrentLine();
 
-/**
- * Set the _currentLine to next line number.  If the current line is not the
- * end, then the _currentLine will be set to the next line.  Otherwise,
- * the _currentLine will be set to -1.
- */
+    /**
+     * Set the _currentLine to next line number.  If the current line is not the
+     * end, then the _currentLine will be set to the next line.  Otherwise,
+     * the _currentLine will be set to -1.
+     */
     void nextLine();
-/**
- * RUN statement implementation
- */
+
     void run(EvalState &state);
 
-/**
- * GOTO implementation
- */
     void goTo(int lineNumber);
 
-/**
- * LIST implementation
- */
     void list();
-/**
- * to stop this program
- */
+
     void end();
 
 private:

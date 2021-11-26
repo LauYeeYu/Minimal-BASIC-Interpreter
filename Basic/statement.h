@@ -18,6 +18,27 @@
 #include "../StanfordCPPLib/tokenscanner.h"
 #include "../StanfordCPPLib/simpio.h"
 
+/**
+ * @param scanner The Token Scanner
+ * @param state Evaluation State to Store the Value of identifiers
+ * @return The Answer of a valid statement
+ *
+ * This function parses an calculating expression (including identifiers)
+ * and return the answer.  When there is some error it will throw relevant
+ * error and go back.
+ */
+int calculate(TokenScanner &scanner, EvalState &state);
+
+bool isDigit(char c);
+bool isLetter(char c);
+bool isLetterOrDigit(char c);
+bool isValidChar(char c);
+bool identifierCheck(const std::string &identifier);
+bool numberCheck(const std::string &identifier);
+bool check(char op, int lhs, int rhs);
+
+int stringToInt(std::string s);
+
 class Program;
 
 /*
@@ -39,7 +60,7 @@ public:
  */
     Statement();
 
-    Statement(const std::string &line);
+    Statement(std::string line);
 
 /*
  * Destructor: ~Statement

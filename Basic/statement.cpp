@@ -9,34 +9,20 @@
 
 #include <string>
 #include "statement.h"
+#include "parser.h"
 
-int calculate(TokenScanner &scanner, EvalState &state);
-bool isDigit (char c);
-bool isLetter(char c);
-bool isLetterOrDigit(char c);
-bool isValidChar(char c);
-bool identifierCheck(std::string &identifier);
-bool numberCheck(std::string &identifier);
-bool check(char op, int lhs, int rhs);
-int stringToInt(std::string &s);
+/** Implementation of the Statement class */
 
-/* Implementation of the Statement class */
+Statement::Statement()  = default;
 
-Statement::Statement() {
-    /* Empty */
-}
+Statement::~Statement() = default;
 
-Statement::~Statement() {
-    /* Empty */
-}
-
-std::ostream &operator<<(ostream &os, const Statement &stmt)
-{
+std::ostream &operator<<(ostream &os, const Statement &stmt) {
     os << stmt._line;
     return os;
 }
 
-Statement::Statement(const string &line) : _line(line) {}
+Statement::Statement(string line) : _line(std::move(line)) {}
 
 /** REM */
 REM::REM() = default;
@@ -218,4 +204,73 @@ void IF::execute(Program &program, EvalState &state) {
     }
 }
 
+int calculate(TokenScanner &scanner, EvalState &state) {
+    Expression *exp = parseExp(scanner);
+    return exp->eval(state);
+}
 
+bool isDigit(const char c) {
+    if (c > 47 && c < 58) return true;
+    else return false;
+}
+
+bool isLetter(const char c) {
+    if ((c > 64 && c < 91) || (c > 96 && c < 123)) return true;
+    else return false;
+}
+
+bool isLetterOrDigit(const char c) {
+    if ((c > 47 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123)) return true;
+    else return false;
+}
+
+bool isValidChar(const char c) {
+    if ((c > 46 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123)
+        || c == 42 || c == 43 || c == 45 || c == 61) return true;
+    else return false;
+}
+
+bool identifierCheck(const std::string &identifier) {
+    if (identifier.empty()) return false;
+    if (!isLetter(identifier[0])) return false;
+    for (int i = 1; i < identifier.length(); ++i) {
+        if (!isLetterOrDigit(identifier[i])) return false;
+    }
+    if (identifier == "REM" || identifier == "LET" || identifier == "PRINT"
+        || identifier == "END" || identifier == "RUN" || identifier == "INPUT"
+        || identifier == "GOTO" || identifier == "IF" || identifier == "THEN"
+        || identifier == "QUIT" || identifier == "LIST" || identifier == "CLEAR"
+        || identifier == "HELP") return false;
+    return true;
+}
+
+bool numberCheck(const std::string &identifier) {
+    if (identifier.empty()) return false;
+    for (char i : identifier) {
+        if (!isDigit(i)) return false;
+    }
+    return true;
+}
+
+bool check(const char op, const int lhs, const int rhs) {
+    if (op == '=') return lhs == rhs;
+    if (op == '<') return lhs < rhs;
+    if (op == '>') return lhs > rhs;
+    error("SYNTAX ERROR");
+    return false;
+}
+
+int stringToInt(std::string s) {
+    int number = 0;
+    bool isPositive = true;
+    if (s[0] == '-') {
+        s = s.substr(1);
+        isPositive = false;
+    }
+    for (char i : s) {
+        if (i < 48 || i > 57) error("INVALID NUMBER");
+        number = number * 10 + i - 48;
+    }
+    if (!isPositive) number = -number;
+    return number;
+}

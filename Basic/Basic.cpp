@@ -4,10 +4,8 @@
  * This file is the starter project for the BASIC interpreter.
  */
 
-#include <cctype>
 #include <iostream>
 #include <string>
-#include <utility>
 
 #include "exp.h"
 #include "parser.h"
@@ -19,22 +17,12 @@
 #include "../StanfordCPPLib/strlib.h"
 
 /* Function prototypes */
-
 void processLine(std::string &line, Program &program, EvalState &state);
 int calculate(TokenScanner &scanner, EvalState &state);
 void scan(std::string &line, Program &program, EvalState &state);
 Statement *newStatement(const std::string &line);
-bool isDigit (char c);
-bool isLetter(char c);
-bool isLetterOrDigit(char c);
-bool isValidChar(char c);
-bool identifierCheck(std::string &identifier);
-bool numberCheck(std::string &identifier);
-bool check(char op, int lhs, int rhs);
-int stringToInt(std::string &s);
 
 /* Main program */
-
 int main() {
     EvalState state;
     Program program;
@@ -92,69 +80,14 @@ void processLine(std::string &line, Program &program, EvalState &state) {
 }
 
 /**
- * @param scanner The Token Scanner
- * @param state Evaluation State to Store the Value of identifiers
- * @return The Answer of a valid statement
+ * Scan the New Line
+ * @param line the Entered Line
+ * @param program the Stored BASIC Program
+ * @param state the Place where variables are stored
  *
- * This function parses an calculating expression (including identifiers)
- * and return the answer.  When there is some error it will throw relevant
- * error and go back.
+ * This function parses a line and execute every valid statements.
+ * If statement is invalid, it will print an error report.
  */
-int calculate(TokenScanner &scanner, EvalState &state) {
-    Expression *exp = parseExp(scanner);
-    return exp->eval(state);
-}
-
-bool isDigit (char c) {
-    if (c > 47 && c < 58) return true;
-    else return false;
-}
-
-bool isLetter(char c) {
-    if ((c > 64 && c < 91) || (c > 96 && c < 123)) return true;
-    else return false;
-}
-
-bool isLetterOrDigit(char c) {
-    if ((c > 47 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123)) return true;
-    else return false;
-}
-
-bool isValidChar(char c) {
-    if ((c > 46 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123)
-        || c == 42 || c == 43 || c == 45 || c == 61) return true;
-    else return false;
-}
-
-bool identifierCheck(std::string &identifier) {
-    if (identifier.empty()) return false;
-    if (!isLetter(identifier[0])) return false;
-    for (int i = 1; i < identifier.length(); ++i) {
-        if (!isLetterOrDigit(identifier[i])) return false;
-    }
-    if (identifier == "REM" || identifier == "LET" || identifier == "PRINT"
-     || identifier == "END" || identifier == "RUN" || identifier == "INPUT"
-     || identifier == "GOTO" || identifier == "IF" || identifier == "THEN"
-     || identifier == "QUIT" || identifier == "LIST" || identifier == "CLEAR"
-     || identifier == "HELP") return false;
-    return true;
-}
-
-bool numberCheck(std::string &identifier) {
-    if (identifier.empty()) return false;
-    for (char i : identifier) {
-        if (!isDigit(i)) return false;
-    }
-    return true;
-}
-
-bool check(char op, int lhs, int rhs) {
-    if (op == '=') return lhs == rhs;
-    if (op == '<') return lhs < rhs;
-    if (op == '>') return lhs > rhs;
-    error("SYNTAX ERROR");
-}
-
 void scan(std::string &line, Program &program, EvalState &state) {
     Statement *newStmt = nullptr;
     TokenScanner scanner;
@@ -168,9 +101,6 @@ void scan(std::string &line, Program &program, EvalState &state) {
         newStmt = new PRINT(line);
     } else if (stmt == "INPUT") {
         newStmt = new INPUT(line);
-    } else if (stmt == "REM" ||stmt == "END"
-            || stmt == "GOTO" || stmt == "IF") {
-        error("SYNTAX ERROR");
     } else if (stmt == "RUN") {
         program.run(state);
         return;
@@ -193,6 +123,16 @@ void scan(std::string &line, Program &program, EvalState &state) {
     delete newStmt;
 }
 
+/**
+ * Syntax Checking and Create a New Statement Pointer if no Problem in Syntax
+ * @param line the Entered Line
+ * @return Statement Pointer of its Derived Class
+ *
+ * This function serves for the full program.  It process a line (without the
+ * number head) and check the syntax of a line.  To avoid extra problems like
+ * memory leak, syntax error MUST be checked before construct a statement
+ * class.
+ */
 Statement *newStatement(const std::string &line) {
     TokenScanner scanner;
     scanner.ignoreWhitespace();
@@ -272,40 +212,6 @@ Statement *newStatement(const std::string &line) {
         return new IF(line);
     }
 
-    if (stmt == "RUN") {
-        error("SYNTAX ERROR");
-    }
-
-    if (stmt == "LIST") {
-        error("SYNTAX ERROR");
-    }
-
-    if (stmt == "CLEAR") {
-        error("SYNTAX ERROR");
-    }
-
-    if (stmt == "QUIT") {
-        error("SYNTAX ERROR");
-    }
-
-    if (stmt == "HELP") {
-        error("SYNTAX ERROR");
-    }
-
     error("SYNTAX ERROR");
-}
-
-int stringToInt(std::string &s) {
-    int number = 0;
-    bool isPositive = true;
-    if (s[0] == '-') {
-        s = s.substr(1);
-        isPositive = false;
-    }
-    for (char i : s) {
-        if (i < 48 || i > 57) error("INVALID NUMBER");
-        number = number * 10 + i - 48;
-    }
-    if (!isPositive) number = -number;
-    return number;
+    return nullptr;
 }

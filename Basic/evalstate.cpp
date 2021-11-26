@@ -1,6 +1,6 @@
-/*
- * File: evalstate.cpp
- * -------------------
+/**
+ * @file evalstate.cpp
+ *
  * This file implements the EvalState class, which defines a symbol
  * table for keeping track of the value of identifiers.  The public
  * methods are simple enough that they need no individual documentation.
@@ -13,13 +13,9 @@
 
 /* Implementation of the EvalState class */
 
-EvalState::EvalState() {
-    /* Empty */
-}
+EvalState::EvalState() = default;
 
-EvalState::~EvalState() {
-    /* Empty */
-}
+EvalState::~EvalState() = default;
 
 void EvalState::setValue(const std::string& var, int value) {
     _symbolTable[var] = value;

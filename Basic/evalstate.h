@@ -13,9 +13,9 @@
 #include <map>
 #include "../StanfordCPPLib/map.h"
 
-/*
- * Class: EvalState
- * ----------------
+/**
+ * @class EvalState
+ *
  * This class is passed by reference through the recursive levels
  * of the evaluator and contains information from the evaluation
  * environment that the evaluator may need to know.  In this
@@ -26,49 +26,36 @@
  */
 class EvalState {
 public:
-/*
- * Constructor: EvalState
- * Usage: EvalState state;
- * -----------------------
- * Creates a new EvalState object with no variable bindings.
- */
     EvalState();
 
-/*
- * Destructor: ~EvalState
- * Usage: usually implicit
- * -----------------------
- * Frees all heap storage associated with this object.
- */
     ~EvalState();
 
-/*
- * Method: setValue
- * Usage: state.setValue(var, value);
- * ----------------------------------
- * Sets the value associated with the specified var.
- */
+    /**
+     * Value Setting
+     * @param var variable
+     * @param value
+     *
+     * Sets the value associated with the specified var.
+     */
     void setValue(const std::string& var, int value);
 
-/*
- * Method: getValue
- * Usage: int value = state.getValue(var);
- * ---------------------------------------
- * Returns the value associated with the specified variable.
- */
+    /**
+     * Value Getter
+     * @param var
+     * @return The Value of Variable
+     */
     int getValue(const std::string& var);
 
-/*
- * Method: isDefined
- * Usage: if (state.isDefined(var)) . . .
- * --------------------------------------
- * Returns true if the specified variable is defined.
- */
+    /**
+     * To Tell whether a Variable is Defined
+     * @param var
+     * @return whether a Variable is Defined
+     */
     bool isDefined(const std::string& var);
-/*
- * Method: clear
- * Usage: clear the symbolTable
- */
+
+    /**
+     * To Clear the Store Data Map
+     */
     void clear();
 
 private:

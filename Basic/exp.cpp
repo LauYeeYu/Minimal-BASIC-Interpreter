@@ -25,13 +25,7 @@ Expression::~Expression() {
     /* Empty */
 }
 
-/*
- * Implementation notes: the ConstantExp subclass
- * ----------------------------------------------
- * The ConstantExp subclass declares a single instance variable that
- * stores the value of the constant.  The eval method doesn't use the
- * value of state but needs it to match the general prototype for eval.
- */
+
 
 ConstantExp::ConstantExp(int value) {
     this->value = value;
@@ -49,7 +43,7 @@ ExpressionType ConstantExp::getType() {
     return CONSTANT;
 }
 
-int ConstantExp::getValue() {
+int ConstantExp::getValue() const {
     return value;
 }
 

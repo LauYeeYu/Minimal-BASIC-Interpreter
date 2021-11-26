@@ -8,7 +8,7 @@ This is an assignment of SJTU ACM class, a minimal BASIC interpreter. For more i
 
 This minimal BASIC interpreter, written with C++ language, can interpret some statement instantly, and also can  store and run a program in ascending order. Besides, this interpreter uses `StanfordCPPLib`, which has the problem of memory leak, so it may probably have the same problem.
 
-這個以 C++ 編寫的解釋器既可以立即解釋某些語句並執行，又可以編寫一個按行數升序依次執行的大型程式。 鑒於此解釋器使用了`StanfordCPPLib`（其存在記憶體流失問題），此解釋器亦可能存在此問題。
+這個以 C++ 編寫的解釋器既可以立即解釋某些語句並執行，又可以編寫一個按行數升序依次執行的大型程式。鑒於此解釋器使用了`StanfordCPPLib`（其存在記憶體流失問題），此解釋器亦可能存在此問題。
 
 
 
@@ -16,15 +16,15 @@ This minimal BASIC interpreter, written with C++ language, can interpret some st
 
 ## How to Use 使用方法
 
-You can use the `CMakeLists.txt` to compile this project.
+You can use the `CMakeLists.txt` to help compile this project.
 
-你可以使用 `CMakeLists.txt` 來編譯此項目。
+你可以使用 `CMakeLists.txt` 來輔助編譯此項目。
 
 
 
-In this interpreter, three statements (`LET`, `PRINT`, and `INPUT`) can be executed both instantly and in a program. Program statements (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) is used to control the program to operate. Other statements (`REM`, `END`, `GOTO`, `IF ... THEN`) can only be executed in a program.
+In this interpreter, three statements (`LET`, `PRINT`, and `INPUT`) can be executed both instantly and in a program. Program statements (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) is used to control the program to operate. Other statements (`REM`, `END`, `GOTO`, `IF ... THEN`) can only be executed in a program.
 
-對於此解釋器，`LET`、`PRINT`、 `INPUT` 三個指令可以即時或在大型程式中執行。控制指令 (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) 則被用於控制大型程式的運作。其餘指令 (`REM`, `END`, `GOTO`, `IF ... THEN`) 則只可在大型程式中執行。
+對於此解釋器，`LET`、`PRINT`、 `INPUT` 三個指令可以即時或在大型程式中執行。控制指令 (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) 則被用於控制大型程式的運作。其餘指令 (`REM`, `END`, `GOTO`, `IF ... THEN`) 則只可在大型程式中執行。
 
 
 
@@ -50,7 +50,7 @@ You can input things in these syntax:
 
 你可以以如下語法輸入：
 
-```basic
+```
 // Sequential Statements
 REM <anything>                    // Comments
 LET <var> = <exp>                 // Initializer
@@ -72,11 +72,23 @@ HELP                              // To give some help
 
 
 
+### ERROR Information 報錯信息
+
+```
+DIVIDE BY ZERO                    // Calculating some number divide by zero.
+INVALID NUMBER                    // User types wrong value to answer INPUT statement.
+VARIABLE NOT DEFINED              // A variable used before assigned it.
+LINE NUMBER ERROR                 // GOTO or IF statement's line number not exist.
+SYNTAX ERROR                      // Any other errors.
+```
 
 
-For more detail, please look up the `Minimal BASIC Interpreter - 2021.pdf`.
 
-如需瞭解更多，請參見`Minimal BASIC Interpreter - 2021.pdf`
+
+
+For more detail, please look up the `Minimal BASIC Interpreter - 2021.pdf` file.
+
+如需瞭解更多，請參見`Minimal BASIC Interpreter - 2021.pdf`檔案。
 
 
 

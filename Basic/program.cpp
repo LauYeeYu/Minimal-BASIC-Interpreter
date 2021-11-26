@@ -9,11 +9,8 @@
  */
 
 #include <string>
-#include <utility>
 #include "program.h"
 #include "statement.h"
-
-using namespace std;
 
 Program::Program() = default;
 

@@ -12,42 +12,47 @@
 
 #include "../StanfordCPPLib/tokenscanner.h"
 
-/*
- * Function: parseExp
- * Usage: Expression *exp = parseExp(scanner);
- * -------------------------------------------
- * Parses an expression by reading tokens from the scanner, which must
- * be provided by the client. The scanner should be set to ignore
- * whitespace and to scan numbers.
+/**
+ * To Parse an Expression
+ * @param scanner
+ * @return Expression Pointer
+ *
+ * This code just reads an expression and then checks for extra tokens.
  */
 Expression *parseExp(TokenScanner &scanner);
 
-/*
- * Function: readE
- * Usage: Expression *exp = readE(scanner, prec);
- * ----------------------------------------------
- * Returns the next expression from the scanner involving only operators
- * whose precedence is at least prec.  The prec argument is optional and
- * defaults to 0, which means that the function reads the entire expression.
+/**
+ * Read expression
+ * @param scanner
+ * @param prec Priority of operator
+ * @return Expression Pointer
+ *
+ * This version of readE uses precedence to resolve the ambiguity in
+ * the grammar.  At each recursive level, the parser reads operators and
+ * subexpressions until it finds an operator whose precedence is greater
+ * than the prevailing one.  When a higher-precedence operator is found,
+ * readE calls itself recursively to read in that subexpression as a unit.
  */
 Expression *readE(TokenScanner &scanner, int prec = 0);
 
-/*
- * Function: readT
- * Usage: Expression *exp = readT(scanner);
- * ----------------------------------------
- * Returns the next individual term, which is either a constant, an
- * identifier, or a parenthesized subexpression.
+/**
+ * Read Token
+ * @param scanner
+ * @return Expression Pointer
+ *
+ * This function scans a term, which is either an integer, an identifier,
+ * or a parenthesized subexpression.
  */
 Expression *readT(TokenScanner &scanner);
 
-/*
- * Function: precedence
- * Usage: int prec = precedence(token);
- * ------------------------------------
- * Returns the precedence of the specified operator token.  If the token
- * is not an operator, precedence returns 0.
+/**
+ * Precedence
+ * @param token
+ * @return The Rank of operator
+ *
+ * This function checks the token against each of the defined operators
+ * and returns the appropriate precedence value.
  */
-int precedence(std::string token);
+int precedence(const std::string &token);
 
 #endif
