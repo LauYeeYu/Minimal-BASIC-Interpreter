@@ -85,11 +85,11 @@ public:
      * These methods have the same prototypes as those in the Expression
      * base class and don't require additional documentation.
      */
-    virtual int eval(EvalState &state);
+    int eval(EvalState &state) override;
 
-    virtual std::string toString();
+    std::string toString() override;
 
-    virtual ExpressionType getType();
+    ExpressionType getType() override;
 
     int getValue() const;
 
@@ -113,11 +113,11 @@ public:
      * These methods have the same prototypes as those in the Expression
      * base class and don't require additional documentation.
      */
-    virtual int eval(EvalState &state);
+    int eval(EvalState &state) override;
 
-    virtual std::string toString();
+    std::string toString() override;
 
-    virtual ExpressionType getType();
+    ExpressionType getType() override;
 
     std::string getName();
 
@@ -145,19 +145,19 @@ public:
      */
     CompoundExp(std::string op, Expression *lhs, Expression *rhs);
 
-    virtual ~CompoundExp();
+    ~CompoundExp() override;
 
-    virtual int eval(EvalState &state);
+    int eval(EvalState &state) override;
 
-    virtual std::string toString();
+    std::string toString() override;
 
-    virtual ExpressionType getType();
+    ExpressionType getType() override;
 
-    std::string getOp();
+    std::string getOp() const;
 
-    Expression *getLHS();
+    Expression *getLHS() const;
 
-    Expression *getRHS();
+    Expression *getRHS() const;
 
 private:
     std::string op;

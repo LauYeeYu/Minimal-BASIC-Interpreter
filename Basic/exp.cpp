@@ -5,11 +5,8 @@
  */
 
 #include <string>
-#include "../StanfordCPPLib/error.h"
 #include "evalstate.h"
 #include "exp.h"
-
-#include "../StanfordCPPLib/strlib.h"
 
 /*
  * Implementation notes: the Expression class
@@ -17,15 +14,9 @@
  * The Expression class declares no instance variables and needs no code.
  */
 
-Expression::Expression() {
-    /* Empty */
-}
+Expression::Expression() = default;
 
-Expression::~Expression() {
-    /* Empty */
-}
-
-
+Expression::~Expression() = default;
 
 ConstantExp::ConstantExp(int value) {
     this->value = value;
@@ -56,7 +47,7 @@ int ConstantExp::getValue() const {
  */
 
 IdentifierExp::IdentifierExp(std::string name) {
-    this->name = name;
+    this->name = std::move(name);
 }
 
 int IdentifierExp::eval(EvalState &state) {
@@ -85,7 +76,7 @@ std::string IdentifierExp::getName() {
  */
 
 CompoundExp::CompoundExp(std::string op, Expression *lhs, Expression *rhs) {
-    this->op = op;
+    this->op = std::move(op);
     this->lhs = lhs;
     this->rhs = rhs;
 }
@@ -133,14 +124,14 @@ ExpressionType CompoundExp::getType() {
     return COMPOUND;
 }
 
-std::string CompoundExp::getOp() {
+std::string CompoundExp::getOp() const {
     return op;
 }
 
-Expression *CompoundExp::getLHS() {
+Expression *CompoundExp::getLHS() const {
     return lhs;
 }
 
-Expression *CompoundExp::getRHS() {
+Expression *CompoundExp::getRHS() const {
     return rhs;
 }

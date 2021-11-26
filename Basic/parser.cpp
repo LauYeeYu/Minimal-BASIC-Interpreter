@@ -4,15 +4,12 @@
  * Implements the parser.h interface.
  */
 
-#include <iostream>
 #include <string>
 
 #include "exp.h"
 #include "parser.h"
 
 #include "../StanfordCPPLib/error.h"
-#include "../StanfordCPPLib/strlib.h"
-#include "../StanfordCPPLib/tokenscanner.h"
 
 Expression *parseExp(TokenScanner &scanner) {
     Expression *exp = readE(scanner);

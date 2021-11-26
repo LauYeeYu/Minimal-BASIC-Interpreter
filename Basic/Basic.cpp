@@ -18,7 +18,6 @@
 
 /* Function prototypes */
 void processLine(std::string &line, Program &program, EvalState &state);
-int calculate(TokenScanner &scanner, EvalState &state);
 void scan(std::string &line, Program &program, EvalState &state);
 Statement *newStatement(const std::string &line);
 
