@@ -17,32 +17,31 @@ using namespace std;
 
 Program::Program() = default;
 
-Program::~Program() = default;
+Program::~Program() {
+    clear();
+}
 
 void Program::clear() {
+    for (auto &line : _program) {
+        delete line.second;
+    }
     _program.clear();
 }
 
-void Program::addSourceLine(int lineNumber, string line) {
-    _program[lineNumber] = std::move(line);
+void Program::addSourceLine(int lineNumber, Statement *stmt) {
+    _program[lineNumber] = stmt;
 }
 
 void Program::removeSourceLine(int lineNumber) {
-    if (_program.count(lineNumber)) _program.erase(lineNumber);
+    if (_program.count(lineNumber)) {
+        delete _program[lineNumber];
+        _program.erase(lineNumber);
+    }
 }
 
-string Program::getSourceLine(int lineNumber) { // May probably be optimized
+Statement *Program::getSourceLine(int lineNumber) {
     if (_program.count(lineNumber)) return _program[lineNumber];
-    else return "";
-}
-
-void Program::setParsedStatement(int lineNumber, Statement *stmt) {
-    // todo : Replace this stub with your own code
-}
-
-Statement *Program::getParsedStatement(int lineNumber) {
-    // todo : Replace this stub with your own code
-    return nullptr;
+    else return nullptr;
 }
 
 int Program::getFirstLineNumber() {
@@ -51,14 +50,46 @@ int Program::getFirstLineNumber() {
 }
 
 int Program::getNextLineNumber(int lineNumber) {
+    if (_currentLine == -1) return -1;
     auto Temp = _program.find(lineNumber);
     ++Temp;
     if (Temp == _program.end()) return -1;
     else return Temp->first;
 }
 
-bool Program::noSuchLine(int lineNumber)
-{
+bool Program::noSuchLine(int lineNumber) {
     if (_program.count(lineNumber)) return false;
     else return true;
+}
+
+void Program::initCurrentLine() {
+    _currentLine = getFirstLineNumber();
+}
+
+void Program::nextLine() {
+    _currentLine = getNextLineNumber(_currentLine);
+}
+
+void Program::run(EvalState &state) {
+    initCurrentLine();
+    Statement *currentStmt;
+    while (_currentLine != -1) {
+        currentStmt = _program[_currentLine];
+        currentStmt->execute(*this, state);
+    }
+}
+
+void Program::goTo(int lineNumber) {
+    if (_program.count(lineNumber)) _currentLine = lineNumber;
+    else error("LINE NUMBER ERROR");
+}
+
+void Program::list() {
+    for (auto &line : _program) {
+        std::cout << line.first << " " << *(line.second) << std::endl;
+    }
+}
+
+void Program::end() {
+    _currentLine = -1;
 }

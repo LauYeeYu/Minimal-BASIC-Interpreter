@@ -10,9 +10,8 @@
 
 #include <string>
 #include "statement.h"
+#include "evalstate.h"
 #include <map>
-
-using namespace std;
 
 /*
  * This class stores the lines in a BASIC program. nEach line
@@ -27,48 +26,41 @@ using namespace std;
  *    pointer to a Statement.
  */
 
+class Statement;
+class EvalState;
+
 class Program {
 public:
-/*
- * Constructor: Program
- * Usage: Program program;
- * -----------------------
+/**
  * Constructs an empty BASIC program.
  */
     Program();
 
-/*
- * Destructor: ~Program
- * Usage: usually implicit
- * -----------------------
+/**
  * Frees any heap storage associated with the program.
  */
     ~Program();
 
-/*
- * Method: clear
- * Usage: program.clear();
- * -----------------------
+/**
  * Removes all lines from the program.
  */
     void clear();
 
-/*
- * Method: addSourceLine
- * Usage: program.addSourceLine(lineNumber, line);
- * -----------------------------------------------
+/**
+ * @param lineNumber
+ * @param line A String of the Line
+ *
  * Adds a source line to the program with the specified line number.
  * If that line already exists, the text of the line replaces
  * the text of any existing line and the parsed representation
  * (if any) is deleted.  If the line is new, it is added to the
  * program in the correct sequence.
  */
-    void addSourceLine(int lineNumber, std::string line);
+    void addSourceLine(int lineNumber, Statement *stmt);
 
-/*
- * Method: removeSourceLine
- * Usage: program.removeSourceLine(lineNumber);
- * --------------------------------------------
+/**
+ * @param lineNumber
+ *
  * Removes the line with the specified number from the program,
  * freeing the memory associated with any parsed representation.
  * If no such line exists, this method simply returns without
@@ -76,66 +68,71 @@ public:
  */
     void removeSourceLine(int lineNumber);
 
-/*
- * Method: getSourceLine
- * Usage: string line = program.getSourceLine(lineNumber);
- * -------------------------------------------------------
- * Returns the program line with the specified line number.
+/**
+ * @param lineNumber
+ * @return
+ * The program line with the specified line number.
  * If no such line exists, this method returns the empty string.
  */
-    std::string getSourceLine(int lineNumber);
+    Statement *getSourceLine(int lineNumber);
 
-/*
- * Method: setParsedStatement
- * Usage: program.setParsedStatement(lineNumber, stmt);
- * ----------------------------------------------------
- * Adds the parsed representation of the statement to the statement
- * at the specified line number.  If no such line exists, this
- * method raises an error.  If a previous parsed representation
- * exists, the memory for that statement is reclaimed.
- */
-    void setParsedStatement(int lineNumber, Statement *stmt);
-
-/*
- * Method: getParsedStatement
- * Usage: Statement *stmt = program.getParsedStatement(lineNumber);
- * ----------------------------------------------------------------
- * Retrieves the parsed representation of the statement at the
- * specified line number.  If no value has been set, this method
- * returns nullptr.
- */
-    Statement *getParsedStatement(int lineNumber);
-
-/*
- * Method: getFirstLineNumber
- * Usage: int lineNumber = program.getFirstLineNumber();
- * -----------------------------------------------------
- * Returns the line number of the first line in the program.
+/**
+ * @return the line number of the first line in the program.
  * If the program has no lines, this method returns -1.
  */
     int getFirstLineNumber();
 
-/*
- * Method: getNextLineNumber
- * Usage: int nextLine = program.getNextLineNumber(lineNumber);
- * ------------------------------------------------------------
- * Returns the line number of the first line in the program whose
+/**
+ * @param lineNumber
+ * @return the line number of the first line in the program whose
  * number is larger than the specified one, which must already exist
  * in the program.  If no more lines remain, this method returns -1.
  * Note that the lineNumber MUST be a valid line.
  */
     int getNextLineNumber(int lineNumber);
 
-/*
- * Method: noSuchLine
- * Usage: bool noSuchLine = noSuchLine(int lineNumber);
- * ------------------------------------------------------------
+/**
+ * @param lineNumber
+ *
  * Returns the boolean of whether a line is in this program.
  */
     bool noSuchLine(int lineNumber);
 
+/**
+ * Initialize the _currentLine.  If the _program is not empty, then the
+ * _currentLine will be set to the first line.  If the _program is empty,
+ * then the _currentLine will be set to -1.
+ */
+    void initCurrentLine();
+
+/**
+ * Set the _currentLine to next line number.  If the current line is not the
+ * end, then the _currentLine will be set to the next line.  Otherwise,
+ * the _currentLine will be set to -1.
+ */
+    void nextLine();
+/**
+ * RUN statement implementation
+ */
+    void run(EvalState &state);
+
+/**
+ * GOTO implementation
+ */
+    void goTo(int lineNumber);
+
+/**
+ * LIST implementation
+ */
+    void list();
+/**
+ * to stop this program
+ */
+    void end();
+
 private:
-    std::map<int, std::string> _program;
+    std::map<int, Statement *> _program;
+    int _currentLine = -1;
 };
 
 #endif

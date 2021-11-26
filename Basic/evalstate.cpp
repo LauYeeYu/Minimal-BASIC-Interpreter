@@ -11,8 +11,6 @@
 
 #include "../StanfordCPPLib/map.h"
 
-using namespace std;
-
 /* Implementation of the EvalState class */
 
 EvalState::EvalState() {
@@ -23,15 +21,15 @@ EvalState::~EvalState() {
     /* Empty */
 }
 
-void EvalState::setValue(const string& var, int value) {
+void EvalState::setValue(const std::string& var, int value) {
     _symbolTable[var] = value;
 }
 
-int EvalState::getValue(const string& var) {
+int EvalState::getValue(const std::string& var) {
     return _symbolTable[var];
 }
 
-bool EvalState::isDefined(const string& var) {
+bool EvalState::isDefined(const std::string& var) {
     return _symbolTable.count(var);
 }
 

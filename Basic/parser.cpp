@@ -14,8 +14,6 @@
 #include "../StanfordCPPLib/strlib.h"
 #include "../StanfordCPPLib/tokenscanner.h"
 
-using namespace std;
-
 /*
  * Implementation notes: parseExp
  * ------------------------------

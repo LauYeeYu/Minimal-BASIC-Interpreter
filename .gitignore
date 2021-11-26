@@ -2,8 +2,7 @@ cmake-build-debug/
 **/*.o
 **/*.a
 *.log
-**/*.pdf
-Basic-Demo-*
+Basic-Demo-64bit
 score.cpp
 score
 Test/

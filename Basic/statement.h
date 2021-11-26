@@ -9,17 +9,16 @@
  * the Statement class hierarchy.
  */
 
-/**
- * This file is way complicated.  For me, it's just a waste of time.  That's
- * why I gave it up.  Why not use function instead of the BRAIN-BOOMING derived
- * class?
- */
-
 #ifndef _statement_h
 #define _statement_h
 
 #include "evalstate.h"
 #include "exp.h"
+#include "program.h"
+#include "../StanfordCPPLib/tokenscanner.h"
+#include "../StanfordCPPLib/simpio.h"
+
+class Program;
 
 /*
  * Class: Statement
@@ -30,7 +29,6 @@
  * for each of the statement and command types required for the
  * BASIC interpreter.
  */
-
 class Statement {
 public:
 /*
@@ -40,6 +38,8 @@ public:
  * its own constructor.
  */
     Statement();
+
+    Statement(const std::string &line);
 
 /*
  * Destructor: ~Statement
@@ -61,37 +61,90 @@ public:
  * method takes an EvalState object for looking up variables or
  * controlling the operation of the interpreter.
  */
-    virtual void execute(EvalState &state) = 0;
+    virtual void execute(Program &program, EvalState &state) = 0;
+
+    friend std::ostream &operator<<(std::ostream &os, const Statement &stmt);
+
+protected:
+    std::string _line;
 };
-/*
-enum Sequential {NOTHING, REM, LET, PRINT, END};
-class SequentialStmt : public Statement {
+
+class REM : public Statement {
 public:
-    SequentialStmt();
+    REM();
 
-    virtual ~SequentialStmt();
+    explicit REM(const std::string &line);
 
-    SequentialStmt(std::string &s);
+    ~REM() override;
 
-    void modify(std::string &s);
-
-private:
-    Sequential _scan(string &s);
-
-private:
-    Sequential _sequentialStmt = NOTHING;
-
+    void execute(Program &program, EvalState &state) override;
 };
-*/
-/*
- * The remainder of this file must consists of subclass
- * definitions for the individual statement forms.  Each of
- * those subclasses must define a constructor that parses a
- * statement from a scanner and a method called execute,
- * which executes that statement.  If the private data for
- * a subclass includes data allocated on the heap (such as
- * an Expression object), the class implementation must also
- * specify its own destructor method to free that memory.
- */
+
+class LET : public Statement {
+public:
+    LET();
+
+    explicit LET(const std::string &line);
+
+    ~LET() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
+class PRINT : public Statement {
+public:
+    PRINT();
+
+    explicit PRINT(const std::string &line);
+
+    ~PRINT() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
+class INPUT : public Statement {
+public:
+    INPUT();
+
+    explicit INPUT(const std::string &line);
+
+    ~INPUT() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
+class END : public Statement {
+public:
+    END();
+
+    explicit END(const std::string &line);
+
+    ~END() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
+class GOTO : public Statement {
+public:
+    GOTO();
+
+    explicit GOTO(const std::string &line);
+
+    ~GOTO() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
+class IF : public Statement {
+public:
+    IF();
+
+    explicit IF(const std::string &line);
+
+    ~IF() override;
+
+    void execute(Program &program, EvalState &state) override;
+};
+
 
 #endif

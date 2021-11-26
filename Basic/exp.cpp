@@ -11,8 +11,6 @@
 
 #include "../StanfordCPPLib/strlib.h"
 
-using namespace std;
-
 /*
  * Implementation notes: the Expression class
  * ------------------------------------------
@@ -43,7 +41,7 @@ int ConstantExp::eval(EvalState &state) {
     return value;
 }
 
-string ConstantExp::toString() {
+std::string ConstantExp::toString() {
     return integerToString(value);
 }
 
@@ -63,7 +61,7 @@ int ConstantExp::getValue() {
  * look this variable up in the evaluation state.
  */
 
-IdentifierExp::IdentifierExp(string name) {
+IdentifierExp::IdentifierExp(std::string name) {
     this->name = name;
 }
 
@@ -72,7 +70,7 @@ int IdentifierExp::eval(EvalState &state) {
     return state.getValue(name);
 }
 
-string IdentifierExp::toString() {
+std::string IdentifierExp::toString() {
     return name;
 }
 
@@ -80,7 +78,7 @@ ExpressionType IdentifierExp::getType() {
     return IDENTIFIER;
 }
 
-string IdentifierExp::getName() {
+std::string IdentifierExp::getName() {
     return name;
 }
 
@@ -92,7 +90,7 @@ string IdentifierExp::getName() {
  * evaluates the subexpressions recursively and then applies the operator.
  */
 
-CompoundExp::CompoundExp(string op, Expression *lhs, Expression *rhs) {
+CompoundExp::CompoundExp(std::string op, Expression *lhs, Expression *rhs) {
     this->op = op;
     this->lhs = lhs;
     this->rhs = rhs;
@@ -133,7 +131,7 @@ int CompoundExp::eval(EvalState &state) {
     return 0;
 }
 
-string CompoundExp::toString() {
+std::string CompoundExp::toString() {
     return '(' + lhs->toString() + ' ' + op + ' ' + rhs->toString() + ')';
 }
 
@@ -141,7 +139,7 @@ ExpressionType CompoundExp::getType() {
     return COMPOUND;
 }
 
-string CompoundExp::getOp() {
+std::string CompoundExp::getOp() {
     return op;
 }
 
