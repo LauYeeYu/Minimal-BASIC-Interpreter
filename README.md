@@ -28,7 +28,25 @@ In this interpreter, three statements (`LET`, `PRINT`, and `INPUT`) can be execu
 
 
 
-You can type things in these syntax:
+### Executing Instantly 即時執行
+
+For the case of instant interpreting, you can enter statement, and this interpreter will interpret it instantly.
+
+如需使用即使執行的語句，請直接輸入語句，解釋器會立即執行該語句。
+
+
+
+### A Full Program 大型程式
+
+For the case of a full program, you need to type the line number in front of the statement you want to enter. Values of variables that have been assigned previously is also stored.
+
+如需編寫大型程式，請在你需要加入大型程式語句前加入行號。此前已經被賦值變量亦會被存在此程式中。
+
+
+
+### Syntax 語法
+
+You can input things in these syntax:
 
 你可以以如下語法輸入：
 
@@ -51,6 +69,10 @@ CLEAR                             // Clear program and every identifier
 QUIT                              // Exit the program
 HELP                              // To give some help
 ```
+
+
+
+
 
 For more detail, please look up the `Minimal BASIC Interpreter - 2021.pdf`.
 
