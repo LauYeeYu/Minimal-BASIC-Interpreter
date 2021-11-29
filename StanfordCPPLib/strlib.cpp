@@ -28,7 +28,7 @@ string integerToString(int n) {
 }
 
 int stringToInteger(string str) {
-    istringstream stream(str);
+    istringstream stream(str + " ");
     int value;
     stream >> value >> ws;
     if (stream.fail() || !stream.eof()) {
@@ -44,7 +44,7 @@ string realToString(double d) {
 }
 
 double stringToReal(string str) {
-    istringstream stream(str);
+    istringstream stream(str + " ");
     double value;
     stream >> value >> ws;
     if (stream.fail() || !stream.eof()) {

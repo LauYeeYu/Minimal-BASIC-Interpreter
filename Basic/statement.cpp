@@ -1,6 +1,6 @@
-/*
- * File: statement.cpp
- * -------------------
+/**
+ * @file statement.cpp
+ *
  * This file implements the constructor and destructor for
  * the Statement class itself.  Your implementation must do
  * the same for the subclasses you define for each of the
@@ -175,7 +175,12 @@ void IF::execute(Program &program, EvalState &state) {
     // Calculate rhs
     int end = op + 1;
     while (tempLine[end] == ' ') ++end;
-    while (tempLine[end] != ' ') ++end;
+    while (end < tempLine.length() && tempLine[end] != 'T'
+        && tempLine[end] != '=' && tempLine[end] != '<' && tempLine[end] != '>') ++end;
+    if (end == tempLine.length() || tempLine[end] == '='
+     || tempLine[end] == '<' || tempLine[end] == '>') error("SYNTAX ERROR");
+
+    --end;
 
     std::string rhsString = tempLine.substr(op + 1, end - op - 1);
     TokenScanner rhsScanner;
@@ -237,10 +242,10 @@ bool identifierCheck(const std::string &identifier) {
         if (!isLetterOrDigit(identifier[i])) return false;
     }
     if (identifier == "REM" || identifier == "LET" || identifier == "PRINT"
-        || identifier == "END" || identifier == "RUN" || identifier == "INPUT"
-        || identifier == "GOTO" || identifier == "IF" || identifier == "THEN"
-        || identifier == "QUIT" || identifier == "LIST" || identifier == "CLEAR"
-        || identifier == "HELP") return false;
+     || identifier == "END" || identifier == "RUN" || identifier == "INPUT"
+     || identifier == "GOTO" || identifier == "IF" || identifier == "THEN"
+     || identifier == "QUIT" || identifier == "LIST" || identifier == "CLEAR"
+     || identifier == "HELP") return false;
     return true;
 }
 
