@@ -1,6 +1,6 @@
-/*
- * File: Basic.cpp
- * ---------------
+/**
+ * @file Basic.cpp
+ *
  * This file is the starter project for the BASIC interpreter.
  */
 
@@ -39,7 +39,7 @@ int main() {
 /**
  * @param line The Input Line
  * @param program The place where program is stored
- * @param state Evaluation State to Store the Value of identifiers
+ * @param state Evaluation State to Store the Value of Identifiers
  *
  * Processes a single line entered by the user.  In this version of
  * implementation, the program reads a line, parses it as an expression,

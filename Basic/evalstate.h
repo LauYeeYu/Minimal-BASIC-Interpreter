@@ -1,6 +1,6 @@
-/*
- * File: evalstate.h
- * -----------------
+/**
+ * @file evalstate.h
+ *
  * This interface exports a class called EvalState, which keeps track
  * of additional information required by the evaluator, most notably
  * the values of variables.

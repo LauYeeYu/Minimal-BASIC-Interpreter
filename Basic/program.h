@@ -1,6 +1,6 @@
-/*
- * File: program.h
- * ---------------
+/**
+ * @file program.h
+ *
  * This interface exports a Program class for storing a BASIC
  * program.
  */
@@ -13,22 +13,17 @@
 #include "evalstate.h"
 #include <map>
 
-/*
- * This class stores the lines in a BASIC program. nEach line
- * in the program is stored in order according to its line number.
- * Moreover, each line in the program is associated with two
- * components:
- *
- * 1. The source line, which is the complete line (including the
- *    line number) that was entered by the user.
- *
- * 2. The parsed representation of that statement, which is a
- *    pointer to a Statement.
- */
-
 class Statement;
 class EvalState;
 
+/**
+ * @class Program
+ *
+ * This class stores the lines in a BASIC program. Each line
+ * in the program is stored in order according to its line number.
+ * Moreover, each line in the program is associated with a
+ * pointer to a Statement, inw which a source line is stored.
+ */
 class Program {
 public:
     Program();
@@ -119,6 +114,7 @@ public:
 
 private:
     std::map<int, Statement *> _program;
+
     int _currentLine = -1;
 };
 

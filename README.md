@@ -2,15 +2,13 @@
 
 This is an assignment of SJTU ACM class, a minimal BASIC interpreter. For more information about this assignment, click [here](https://github.com/ACM-Programming-2021/BASIC-Interpreter).
 
-此爲上海交通大學 ACM 班程式設計大作業之一，一個精簡的 BASIC 解釋器。如需獲取更多關於此大作業的内容，請點擊[此處](https://github.com/ACM-Programming-2021/BASIC-Interpreter)。
+此爲上海交通大學 ACM 班程式設計大作業之一，是一個精簡的 BASIC 解釋器。如需獲取更多關於此大作業的内容，請點擊[此處](https://github.com/ACM-Programming-2021/BASIC-Interpreter)。
 
 
 
 This minimal BASIC interpreter, written with C++ language, can interpret some statement instantly, and also can  store and run a program in ascending order. Besides, this interpreter uses `StanfordCPPLib`, which has the problem of memory leak, so it may probably have the same problem.
 
 這個以 C++ 編寫的解釋器既可以立即解釋某些語句並執行，又可以編寫一個按行數升序依次執行的大型程式。鑒於此解釋器使用了`StanfordCPPLib`（其存在記憶體流失問題），此解釋器亦可能存在此問題。
-
-
 
 
 
@@ -24,7 +22,7 @@ You can use the `CMakeLists.txt` to help compile this project.
 
 In this interpreter, three statements (`LET`, `PRINT`, and `INPUT`) can be executed both instantly and in a program. Program statements (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) is used to control the program to operate. Other statements (`REM`, `END`, `GOTO`, `IF ... THEN`) can only be executed in a program.
 
-對於此解釋器，`LET`、`PRINT`、 `INPUT` 三個指令可以即時或在大型程式中執行。控制指令 (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) 則被用於控制大型程式的運作。其餘指令 (`REM`, `END`, `GOTO`, `IF ... THEN`) 則只可在大型程式中執行。
+對於此解釋器，`LET`、`PRINT`、 `INPUT` 三個指令可以即時地或延時地在大型程式中執行。控制指令 (`RUN`, `LIST`, `CLEAR`, `QUIT`, `HELP`) 則被用於控制大型程式的運作。其餘指令 (`REM`, `END`, `GOTO`, `IF ... THEN`) 則僅可在大型程式中執行。
 
 
 
@@ -38,9 +36,9 @@ For the case of instant interpreting, you can enter statement, and this interpre
 
 ### A Full Program 大型程式
 
-For the case of a full program, you need to type the line number in front of the statement you want to enter. Values of variables that have been assigned previously is also stored.
+For the case of a full program, you need to type the line number in front of the statement you want to enter. The values of variables that have been assigned previously is also stored.
 
-如需編寫大型程式，請在你需要加入大型程式語句前加入行號。此前已經被賦值變量亦會被存在此程式中。
+如需編寫大型程式，請在你需要加入大型程式的語句前加入行號。此前已經被賦值變量亦會被存在此程式中。
 
 
 
@@ -48,7 +46,7 @@ For the case of a full program, you need to type the line number in front of the
 
 You can input things in these syntax:
 
-你可以以如下語法輸入：
+你可以以如下之語法輸入：
 
 ```
 // Sequential Statements
@@ -82,13 +80,9 @@ LINE NUMBER ERROR                 // GOTO or IF statement's line number not exis
 SYNTAX ERROR                      // Any other errors.
 ```
 
-
-
-
-
 For more detail, please look up the `Minimal BASIC Interpreter - 2021.pdf` file.
 
-如需瞭解更多，請參見`Minimal BASIC Interpreter - 2021.pdf`檔案。
+如需瞭解更多，請參見 `Minimal BASIC Interpreter - 2021.pdf` 檔案。
 
 
 

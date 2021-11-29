@@ -1,6 +1,6 @@
-/*
- * File: exp.cpp
- * -------------
+/**
+ * @file exp.cpp
+ *
  * This file implements the Expression class and its subclasses.
  */
 
@@ -8,9 +8,9 @@
 #include "evalstate.h"
 #include "exp.h"
 
-/*
+/**
  * Implementation notes: the Expression class
- * ------------------------------------------
+ * <br>
  * The Expression class declares no instance variables and needs no code.
  */
 
@@ -38,9 +38,7 @@ int ConstantExp::getValue() const {
     return value;
 }
 
-/*
- * Implementation notes: the IdentifierExp subclass
- * ------------------------------------------------
+/**
  * The IdentifierExp subclass declares a single instance variable that
  * stores the name of the variable. The implementation of eval must
  * look this variable up in the evaluation state.
@@ -67,9 +65,7 @@ std::string IdentifierExp::getName() {
     return name;
 }
 
-/*
- * Implementation notes: the CompoundExp subclass
- * ----------------------------------------------
+/**
  * The CompoundExp subclass declares instance variables for the operator
  * and the left and right subexpressions.  The implementation of eval 
  * evaluates the subexpressions recursively and then applies the operator.
@@ -86,9 +82,7 @@ CompoundExp::~CompoundExp() {
     delete rhs;
 }
 
-/*
- * Implementation notes: eval
- * --------------------------
+/**
  * The eval method for the compound expression case must check for the
  * assignment operator as a special case.  Unlike the arithmetic operators
  * the assignment operator does not evaluate its left operand.

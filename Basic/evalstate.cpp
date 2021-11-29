@@ -11,7 +11,7 @@
 
 #include "../StanfordCPPLib/map.h"
 
-/* Implementation of the EvalState class */
+/** Implementation of the EvalState class */
 
 EvalState::EvalState() = default;
 

@@ -1,6 +1,6 @@
-/*
- * File: program.cpp
- * -----------------
+/**
+ * @file program.cpp
+ *
  * This file is a stub implementation of the program.h interface
  * in which none of the methods do anything beyond returning a
  * value of the correct type.  Your job is to fill in the bodies

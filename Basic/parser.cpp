@@ -1,6 +1,6 @@
-/*
- * File: parser.cpp
- * ----------------
+/**
+ * @file parser.cpp
+ *
  * Implements the parser.h interface.
  */
 

@@ -1,6 +1,6 @@
-/*
- * File: statement.h
- * -----------------
+/**
+ * @file statement.h
+ *
  * This file defines the Statement abstract type.  In
  * the finished version, this file will also specify subclasses
  * for each of the statement types.  As you design your own
@@ -30,20 +30,33 @@
 int calculate(TokenScanner &scanner, EvalState &state);
 
 bool isDigit(char c);
+
 bool isLetter(char c);
+
 bool isLetterOrDigit(char c);
+
 bool isValidChar(char c);
+
 bool identifierCheck(const std::string &identifier);
+
 bool numberCheck(const std::string &identifier);
+
+/**
+ *
+ * @param op Comparative Operator
+ * @param lhs
+ * @param rhs
+ * @return the Boolean of the Comparing Statement
+ */
 bool check(char op, int lhs, int rhs);
 
 int stringToInt(std::string s);
 
 class Program;
 
-/*
- * Class: Statement
- * ----------------
+/**
+ * @class Statement
+ *
  * This class is used to represent a statement in a program.
  * The model for this class is Expression in the exp.h interface.
  * Like Expression, Statement is an abstract class with subclasses
@@ -52,36 +65,36 @@ class Program;
  */
 class Statement {
 public:
-/*
- * Constructor: Statement
- * ----------------------
- * The base class constructor is empty.  Each subclass must provide
- * its own constructor.
- */
+    /**
+     * @constructor
+     *
+     * The base class constructor is empty.  Each subclass must provide
+     * its own constructor.
+     */
     Statement();
 
     Statement(std::string line);
 
-/*
- * Destructor: ~Statement
- * Usage: delete stmt;
- * -------------------
- * The destructor deallocates the storage for this expression.
- * It must be declared virtual to ensure that the correct subclass
- * destructor is called when deleting a statement.
- */
+    /**
+     * @destructor
+     *
+     * The destructor deallocates the storage for this expression.
+     * It must be declared virtual to ensure that the correct subclass
+     * destructor is called when deleting a statement.
+     */
     virtual ~Statement();
 
-/*
- * Method: execute
- * Usage: stmt->execute(state);
- * ----------------------------
- * This method executes a BASIC statement.  Each of the subclasses
- * defines its own execute method that implements the necessary
- * operations.  As was true for the expression evaluator, this
- * method takes an EvalState object for looking up variables or
- * controlling the operation of the interpreter.
- */
+    /**
+     * Execute
+     * @param state Evaluate State
+     * @param program Program Storing Lines of Statements
+     *
+     * This method executes a BASIC statement.  Each of the subclasses
+     * defines its own execute method that implements the necessary
+     * operations.  As was true for the expression evaluator, this
+     * method takes an EvalState object for looking up variables or
+     * controlling the operation of the interpreter.
+     */
     virtual void execute(Program &program, EvalState &state) = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const Statement &stmt);

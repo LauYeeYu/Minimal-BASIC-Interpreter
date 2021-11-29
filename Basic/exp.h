@@ -63,7 +63,7 @@ public:
 };
 
 /**
- * @class: ConstantExp
+ * @class ConstantExp
  *
  * This subclass represents a constant integer expression.
  */
@@ -98,7 +98,7 @@ private:
 };
 
 /**
- * @class: IdentifierExp
+ * @class IdentifierExp
  *
  * This subclass represents an expression corresponding to a variable.
  */
@@ -126,7 +126,7 @@ private:
 };
 
 /**
- * @class: CompoundExp
+ * @class CompoundExp
  *
  * This subclass represents a compound expression consisting of
  * two subexpressions joined by an operator.
