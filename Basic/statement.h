@@ -180,5 +180,4 @@ public:
     void execute(Program &program, EvalState &state) override;
 };
 
-
 #endif
